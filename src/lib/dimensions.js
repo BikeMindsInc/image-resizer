@@ -188,3 +188,26 @@ exports.cropFillUp = function(modifiers, size){
     }
   };
 };
+
+exports.cropPercent = function(modifiers, size){
+  if (modifiers.width === null){
+    modifiers.width = modifiers.height;
+  }
+  if (modifiers.height === null){
+    modifiers.height = modifiers.width;
+  }
+
+  modifiers.tx = modifiers.tx || 0;
+  modifiers.ty = modifiers.ty || 0;
+  modifiers.bx = modifiers.bx || 1;
+  modifiers.by = modifiers.by || 1;
+
+  return {
+    crop: {
+      width:  Math.round((modifiers.bx - modifiers.tx) * size.width),
+      height: Math.round((modifiers.by - modifiers.ty) * size.height),
+      x:      Math.round(modifiers.tx * size.width),
+      y:      Math.round(modifiers.ty * size.height)
+    }
+  };
+};

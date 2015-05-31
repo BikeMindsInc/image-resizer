@@ -144,6 +144,17 @@ module.exports = function () {
           );
 
           break;
+        case 'percent':
+          d = dims.cropPercent(image.modifiers, size);
+
+          r.extract(
+            d.crop.y,
+            d.crop.x,
+            d.crop.width,
+            d.crop.height
+          );
+
+          break;
         case 'cut':
           wd = image.modifiers.width || image.modifiers.height;
           ht = image.modifiers.height || image.modifiers.width;

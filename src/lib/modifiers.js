@@ -90,6 +90,11 @@ modifierMap = [
     type: 'integer'
   },
   {
+    key: 'p',
+    desc: 'crop_percentages',
+    type: 'list'
+  },
+  {
     key: 'g',
     desc: 'gravity',
     type: 'string',
@@ -209,6 +214,15 @@ function parseModifiers(mods, modArr) {
       case 'left':
         mods.x = string.sanitize(value);
         mods.hasModStr = true;
+        break;
+      case 'crop_percentages':
+        var corners = value.match(/([0-9\.]*),([0-9\.]*),([0-9\.]*),([0-9\.]*)/);
+        if (!corners) return;
+
+        mods.tx = parseFloat(corners[1]) || 0;
+        mods.ty = parseFloat(corners[2]) || 0;
+        mods.bx = parseFloat(corners[3]) || 1;
+        mods.by = parseFloat(corners[4]) || 1;
         break;
       case 'crop':
         value = string.sanitize(value, 'alpha');
@@ -362,6 +376,10 @@ exports.parse = function(requestUrl, namedMods, envOverride){
     }
     if (_.has(mods, 'x') || _.has(mods, 'y')) {
       mods.action = 'crop';
+    }
+    if (_.has(mods, 'ty') && _.has(mods, 'tx') && _.has(mods, 'by') && _.has(mods, 'bx')){
+      mods.action = 'crop';
+      mods.crop = 'percent';
     }
   }
 
